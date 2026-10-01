@@ -1,0 +1,36 @@
+/* My Account submenu */
+.customer-nav-link {
+    display: block;
+    width: 100%;
+    padding: 12px 4px;
+    margin: 2px 0;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    color: #f5f5f5 !important;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+
+    transition: color 0.2s ease;
+}
+
+/* Hover */
+.customer-nav-link:hover {
+    background: transparent !important;
+    color: #c5a059 !important;
+}
+
+/* Currently selected section */
+.customer-nav-link.active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    color: #c5a059 !important;
+    font-weight: 600;
+}

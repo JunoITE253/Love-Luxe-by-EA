@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" data-require-admin>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Love Luxe By EA</title>
+
+        <link rel="stylesheet" href="product.css">
+        <link rel="stylesheet" href="inventory.css">
+        <link rel="stylesheet" href="sidebar.css">
+    </head>
+
+    <body>
+        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+        <div class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+        <aside class="sidebar">
+            <div class="brand">
+                <h1>LOVE LUXE</h1>
+                <p>BY EA • EST. 2024</p>
+            </div>
+
+            <div class="menu-title">GENERAL</div>
+            <a href="#" class="nav">Dashboard</a>
+
+            <div class="menu-title">TEAM MODULES</div>
+
+            <div class="order-section">
+                <a href="#" class="nav" id="orderNav"
+                    aria-expanded="false" onclick="openOrderGroup(event)">
+                    New Order / POS
+                    <span id="orderToggle">+</span>
+                </a>
+
+                <div class="subnav-menu" id="orderMenu" hidden>
+                    <a href="#" class="subnav" data-order-view="appointments"
+                        onclick="openOrderView('appointments', event)">
+                        Appointments
+                    </a>
+
+                    <a href="#" class="subnav" data-order-view="logs"
+                        onclick="openOrderView('logs', event)">
+                        Activity Logs
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-section">
+                <a href="#" class="nav" id="productManagementNav"
+                    onclick="toggleProductMenu(event)">
+                    Product Management
+                    <span id="productToggle">+</span>
+                </a>
+
+                <div class="subnav-menu" id="productMenu" style="display: none;">
+                    <a href="#" class="subnav active" data-page="products"
+                        onclick="showProductPage('products', event)">
+                        Add / Remove Product
+                    </a>
+
+                    <a href="#" class="subnav" data-page="audit"
+                        onclick="showProductPage('audit', event)">
+                        Product Audit Trail
+                    </a>
+
+                    <a href="#" class="subnav" data-page="archive"
+                        onclick="showProductPage('archive', event)">
+                        Product Archive
+                    </a>
+                </div>
+            </div>
+
+            <a href="#" class="nav" id="inventoryNav"
+                onclick="showProductPage('inventory', event)">
+                Inventory & Stock
+            </a>
+
+            <div class="sales-section">
+                <a href="#" class="nav" id="salesNav"
+                    aria-expanded="false" onclick="openSalesGroup(event)">
+                    Sales Reports
+                    <span id="salesToggle">+</span>
+                </a>
+
+                <div class="subnav-menu" id="salesMenu" hidden>
+                    <a href="#" class="subnav" data-order-view="history"
+                        onclick="openOrderView('history', event)">
+                        Transaction History
+                    </a>
+
+                    <a href="#" class="subnav" data-order-view="analytics"
+                        onclick="openOrderView('analytics', event)">
+                        Sales Analytics
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="productsPage">
+                <header class="page-header">
+                    <div>
+                        <span class="eyebrow">PRODUCT MANAGEMENT</span>
+                        <h1>Add / Remove Product</h1>
+                        <p>Add and manage the product information of Love Luxe By EA.</p>
+                    </div>
+                    <div class="system-account" aria-label="Logged-in account">
+                        <div class="system-account-info">
+                            <strong data-account-name>Account</strong>
+                            <small data-account-role>Administrator</small>
+                        </div>
+                        <div class="system-account-avatar" data-account-initial>A</div>
+                    </div>
+
+                </header>
+
+                <section class="form-section">
+                    <div class="section-title">
+                        <h2>Product Information</h2>
+                        <p>Enter the details of the product.</p>
+                    </div>
+
+                    <form id="productForm" novalidate>
+                        <div class="edit-banner" id="editBanner">
+                            <span>
+                                Editing
+                                <strong id="editBannerName"></strong>
+                            </span>
+
+                            <button type="button" onclick="clearForm()">
+                                Cancel edit
+                            </button>
+                        </div>
+
+                        <div class="form-block">
+                            <div class="block-head">
+                                <span class="block-num">1</span>
+
+                                <div>
+                                    <h3>Basic details</h3>
+                                    <p>Each product needs its own unique code.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label for="productCode">Product Code</label>
+
+                                    <input
+                                        type="text"
+                                        id="productCode"
+                                        autocomplete="off"
+                                        placeholder="e.g. LL-001"
+                                        maxlength="12"
+                                        autocapitalize="characters"
+                                        spellcheck="false"
+                                        oninput="checkProductCode()"
+                                        onblur="checkProductCode(true)"
+                                    >
+
+                                    <span class="field-error" id="productCodeError"></span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="productName">Product Name</label>
+
+                                    <input
+                                        type="text"
+                                        id="productName"
+                                        autocomplete="off"
+                                        placeholder="Enter product name"
+                                        oninput="clearFieldError('productName')"
+                                    >
+
+                                    <span class="field-error" id="productNameError"></span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="category">Category</label>
+
+                                    <select id="category" onchange="clearFieldError('category')">
+                                        <option value="">Select category</option>
+                                        <option value="Bags">Bags</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Perfumes">Perfumes</option>
+                                        <option value="Body Care Products">Body Care Products</option>
+                                    </select>
+
+                                    <span class="field-error" id="categoryError"></span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="price">Price</label>
+
+                                    <div class="input-affix">
+                                        <span class="affix">₱</span>
+
+                                        <input
+                                            type="text"
+                                            id="price"
+                                            inputmode="numeric"
+                                            autocomplete="off"
+                                            maxlength="12"
+                                            placeholder="0"
+                                            onkeydown="blockPriceKeys(event)"
+                                            oninput="sanitizePriceInput()"
+                                        >
+                                    </div>
+
+                                    <span class="field-hint">Whole pesos only, no centavos.</span>
+                                    <span class="field-error" id="priceError"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-block">
+                            <div class="block-head">
+                                <span class="block-num">2</span>
+
+                                <div>
+                                    <h3>Options</h3>
+                                    <p>Sizes, colors or scents available for this product.</p>
+                                </div>
+                            </div>
+
+                            <p class="variant-hint" id="variantHint">
+                                Select a category above to choose its sizes, colors or scents.
+                            </p>
+
+                            <div class="form-grid">
+                                <div class="field variant-field" id="sizeGroup">
+                                    <label>Sizes</label>
+                                    <div class="variant-options" id="sizeOptions"></div>
+                                </div>
+
+                                <div class="field variant-field" id="colorGroup">
+                                    <label>Colors</label>
+                                    <div class="variant-options" id="colorOptions"></div>
+
+                                    <div class="manual-entry">
+                                        <span class="manual-title">Other color</span>
+
+                                        <div class="manual-row">
+                                            <input
+                                                type="text"
+                                                id="manualColor"
+                                                autocomplete="off"
+                                                maxlength="40"
+                                                placeholder="Type a color, then press Add"
+                                                onkeydown="manualEntryKey(event, 'color')"
+                                                oninput="clearFieldError('manualColor')"
+                                            >
+
+                                            <button
+                                                type="button"
+                                                class="manual-add-btn"
+                                                onclick="addManualValue('color')">
+                                                Add
+                                            </button>
+                                        </div>
+
+                                        <span class="field-error" id="manualColorError"></span>
+                                        <div class="manual-chips" id="manualColorChips"></div>
+                                    </div>
+                                </div>
+
+                                <div class="field variant-field full" id="scentGroup">
+                                    <label>Scents</label>
+
+                                    <div class="manual-entry">
+                                        <div class="manual-row">
+                                            <input
+                                                type="text"
+                                                id="manualScent"
+                                                autocomplete="off"
+                                                maxlength="40"
+                                                placeholder="Type a scent, then press Add"
+                                                onkeydown="manualEntryKey(event, 'scent')"
+                                                oninput="clearFieldError('manualScent')"
+                                            >
+
+                                            <button
+                                                type="button"
+                                                class="manual-add-btn"
+                                                onclick="addManualValue('scent')">
+                                                Add
+                                            </button>
+                                        </div>
+
+                                        <span class="field-hint">
+                                            Add one at a time, or separate several with commas.
+                                        </span>
+
+                                        <span class="field-error" id="manualScentError"></span>
+                                        <div class="manual-chips" id="manualScentChips"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-block">
+                            <div class="block-head">
+                                <span class="block-num">3</span>
+
+                                <div>
+                                    <h3>Photos</h3>
+                                    <p>Add one photo or several. The first photo is the cover.</p>
+                                </div>
+
+                                <span class="photo-counter" id="imageCounter">0 / 6</span>
+                            </div>
+
+                            <div class="upload-zone" id="productImageZone">
+                                <input
+                                    type="file"
+                                    id="productImage"
+                                    accept="image/*"
+                                    multiple
+                                >
+
+                                <div class="upload-content">
+                                    <span class="upload-icon">＋</span>
+                                    <strong id="uploadText">Add photos</strong>
+                                    <span>Drag and drop, or click to browse. One photo is enough.</span>
+                                </div>
+                            </div>
+
+                            <div class="image-grid" id="imageGrid"></div>
+                            <span class="field-error" id="productImageError"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button
+                                type="button"
+                                class="cancel-form-btn"
+                                onclick="clearForm()">
+                                Clear
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="primary-btn"
+                                id="addProductButton">
+                                Add Product
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="list-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Product List</h2>
+                            <p>Manage the products currently registered in the system.</p>
+                        </div>
+
+                        <span class="record-count" id="productCount">
+                            <strong>0</strong>
+                            Products
+                        </span>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search products, code, color, size, or scent..."
+                            oninput="displayProducts()"
+                        >
+
+                        <select id="filterCategory" onchange="displayProducts()">
+                            <option value="">All Categories</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Perfumes">Perfumes</option>
+                            <option value="Body Care Products">Body Care Products</option>
+                        </select>
+                    </div>
+
+                    <div class="product-container" id="productContainer"></div>
+                </section>
+            </section>
+
+            <section id="auditPage" class="hidden-page">
+                <header class="page-header">
+                    <div>
+                        <span class="eyebrow">PRODUCT MANAGEMENT</span>
+                        <h1>Product Audit Trail</h1>
+                        <p>Automatically records changes made to product records.</p>
+                    </div>
+                    <div class="system-account" aria-label="Logged-in account">
+                        <div class="system-account-info">
+                            <strong data-account-name>Account</strong>
+                            <small data-account-role>Administrator</small>
+                        </div>
+                        <div class="system-account-avatar" data-account-initial>A</div>
+                    </div>
+
+                </header>
+
+                <section class="summary-grid five">
+                    <button
+                        type="button"
+                        class="summary-card summary-filter"
+                        data-filter=""
+                        onclick="setAuditFilter('')">
+                        <span class="summary-label">TOTAL ACTIVITIES</span>
+                        <strong id="totalActivities">0</strong>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="summary-card summary-filter"
+                        data-filter="Added"
+                        onclick="setAuditFilter('Added')">
+                        <span class="summary-label">
+                            <i class="dot action-added"></i>
+                            ADDED
+                        </span>
+                        <strong id="addedCount">0</strong>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="summary-card summary-filter"
+                        data-filter="Updated"
+                        onclick="setAuditFilter('Updated')">
+                        <span class="summary-label">
+                            <i class="dot action-updated"></i>
+                            UPDATED
+                        </span>
+                        <strong id="updatedCount">0</strong>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="summary-card summary-filter"
+                        data-filter="Deleted"
+                        onclick="setAuditFilter('Deleted')">
+                        <span class="summary-label">
+                            <i class="dot action-deleted"></i>
+                            DELETED
+                        </span>
+                        <strong id="deletedCount">0</strong>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="summary-card summary-filter"
+                        data-filter="Restored"
+                        onclick="setAuditFilter('Restored')">
+                        <span class="summary-label">
+                            <i class="dot action-restored"></i>
+                            RESTORED
+                        </span>
+                        <strong id="restoredCount">0</strong>
+                    </button>
+                </section>
+
+                <section class="audit-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Activity Records</h2>
+                            <p>Product changes are recorded automatically.</p>
+                        </div>
+
+                        <div class="heading-actions">
+                            <span class="record-count review-pending" id="reviewPending">
+                                <strong>0</strong>
+                                To review
+                            </span>
+
+                            <span class="record-count" id="recordCount">
+                                <strong>0</strong>
+                                Records
+                            </span>
+
+                            <button
+                                type="button"
+                                class="review-all-btn"
+                                id="reviewAllButton"
+                                onclick="reviewAllAudit()">
+                                ✓ Review all
+                            </button>
+
+                            <button
+                                type="button"
+                                class="export-btn"
+                                id="exportAuditButton"
+                                onclick="exportAuditCSV()">
+                                ⇩ Export CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            id="auditSearchInput"
+                            placeholder="Search product or code..."
+                            oninput="displayAudit()"
+                        >
+
+                        <div class="date-filter" id="auditDateWrap">
+                            <input
+                                type="date"
+                                id="auditDateFilter"
+                                title="Show only activity on this date"
+                                aria-label="Filter by date"
+                                onchange="displayAudit()"
+                            >
+
+                            <button
+                                type="button"
+                                class="date-clear"
+                                id="auditDateClear"
+                                title="Clear date"
+                                aria-label="Clear date filter"
+                                onclick="clearAuditDate()">
+                                ×
+                            </button>
+                        </div>
+
+                        <select id="actionFilter" onchange="displayAudit()">
+                            <option value="">All Actions</option>
+                            <option value="Added">Added</option>
+                            <option value="Updated">Updated</option>
+                            <option value="Deleted">Deleted</option>
+                            <option value="Restored">Restored</option>
+                        </select>
+
+                        <select id="reviewFilter" onchange="displayAudit()">
+                            <option value="">All Reviews</option>
+                            <option value="unreviewed">To review</option>
+                            <option value="reviewed">Reviewed</option>
+                        </select>
+                    </div>
+
+                    <div class="audit-table-wrapper">
+                        <table class="audit-table">
+                            <thead>
+                                <tr>
+                                    <th>When</th>
+                                    <th>Product</th>
+                                    <th>Action</th>
+                                    <th>Changes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="auditTable"></tbody>
+                        </table>
+
+                        <div class="empty-state" id="emptyMessage"></div>
+                    </div>
+                </section>
+            </section>
+
+            <section id="archivePage" class="hidden-page">
+                <header class="page-header">
+                    <div>
+                        <span class="eyebrow">PRODUCT MANAGEMENT</span>
+                        <h1>Product Archive</h1>
+                        <p>Recently deleted products can be restored or permanently removed.</p>
+                    </div>
+                    <div class="system-account" aria-label="Logged-in account">
+                        <div class="system-account-info">
+                            <strong data-account-name>Account</strong>
+                            <small data-account-role>Administrator</small>
+                        </div>
+                        <div class="system-account-avatar" data-account-initial>A</div>
+                    </div>
+
+                </header>
+
+                <section class="archive-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Archived Products</h2>
+                            <p>Deleted products are automatically moved here.</p>
+                        </div>
+
+                        <span class="record-count" id="archiveRecordCount">
+                            <strong>0</strong>
+                            Records
+                        </span>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            id="archiveSearchInput"
+                            placeholder="Search archived products or code..."
+                            oninput="displayArchivedProducts()"
+                        >
+
+                        <select id="archiveFilterCategory" onchange="displayArchivedProducts()">
+                            <option value="">All Categories</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Perfumes">Perfumes</option>
+                            <option value="Body Care Products">Body Care Products</option>
+                        </select>
+                    </div>
+
+                    <div class="archive-container" id="archiveContainer"></div>
+                </section>
+            </section>
+
+            <section id="inventoryPage" class="hidden-page">
+                <header class="page-header inventory-header">
+                    <div>
+                        <span class="eyebrow">TEAM MODULE</span>
+                        <h1>Inventory Management</h1>
+                        <p>Monitor current stock levels and automatic restocking.</p>
+                    </div>
+                    <div class="system-account" aria-label="Logged-in account">
+                        <div class="system-account-info">
+                            <strong data-account-name>Account</strong>
+                            <small data-account-role>Administrator</small>
+                        </div>
+                        <div class="system-account-avatar" data-account-initial>A</div>
+                    </div>
+
+                </header>
+
+                <section class="summary-grid">
+                    <div class="summary-card inventory-summary">
+                        <div class="summary-icon">▦</div>
+
+                        <div>
+                            <p>Total Products</p>
+                            <h2 id="totalProducts">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="summary-card inventory-summary">
+                        <div class="summary-icon">✓</div>
+
+                        <div>
+                            <p>In Stock</p>
+                            <h2 id="inStock">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="summary-card inventory-summary">
+                        <div class="summary-icon">!</div>
+
+                        <div>
+                            <p>Low Stock</p>
+                            <h2 id="lowStock">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="summary-card inventory-summary">
+                        <div class="summary-icon">×</div>
+
+                        <div>
+                            <p>Out of Stock</p>
+                            <h2 id="outOfStock">0</h2>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="inventory-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Current Inventory</h2>
+                            <p>Products added through Product Management appear here automatically.</p>
+                        </div>
+
+                        <div class="inventory-count" id="inventoryCount">0 items</div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            id="inventorySearchInput"
+                            placeholder="Search product, code, color, size, or scent..."
+                            oninput="renderInventory()"
+                        >
+                    </div>
+
+                    <div class="inventory-table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Code</th>
+                                    <th>Variants</th>
+                                    <th>Current Stock</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="inventoryBody">
+                                <tr class="empty-row">
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">▦</div>
+                                            <strong>No inventory items</strong>
+                                            <span>Add a product through Product Management to begin.</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="restock-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Restocking Status</h2>
+                            <p>Restocking is automatically triggered when stock reaches its threshold.</p>
+                        </div>
+
+                        <div class="auto-label">
+                            <span></span>
+                            Automatic Restock
+                        </div>
+                    </div>
+
+                    <div class="restock-list" id="restockList">
+                        <div class="restock-empty" id="restockEmpty">
+                            <div class="empty-icon">↻</div>
+                            <strong>No restocking activity</strong>
+                            <span>Automatic restocking records will appear here when an item reaches its threshold.</span>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+
+        <iframe
+            id="orderFrame"
+            title="Order and Sales modules"
+            src="order.html"
+            hidden
+            onload="sendOrderView()">
+        </iframe>
+
+        <div class="modal-overlay" id="stockModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div>
+                        <span class="eyebrow">INVENTORY</span>
+                        <h2>Stock Management</h2>
+                        <p>Manage stock and threshold for each product variant.</p>
+                    </div>
+                </div>
+
+                <div class="product-preview">
+                    <div class="product-preview-icon" id="stockProductIcon">P</div>
+
+                    <div>
+                        <strong id="stockProductName">Product Name</strong>
+                        <span id="stockProductCode">LL-000</span>
+                    </div>
+                </div>
+
+                <form id="stockForm">
+                    <input type="hidden" id="stockItemId">
+
+                    <div id="variantStockContainer"></div>
+                    <div class="modal-message" id="stockMessage"></div>
+
+                    <div class="modal-actions">
+                        <button
+                            type="button"
+                            class="modal-cancel-btn"
+                            onclick="closeStockModal()">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="modal-save-btn">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="session.js"></script>
+        <script src="product.js"></script>
+        <script src="inventory.js"></script>
+        <script src="portal.js"></script>
+    </body>
+</html>

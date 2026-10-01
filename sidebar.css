@@ -1,0 +1,20 @@
+.sidebar .brand h1 { color: var(--gold, #d0a95c); }
+.sidebar { overflow-y: auto; }
+.sidebar [hidden], #orderFrame[hidden] { display: none !important; }
+.sidebar .subnav.active { background: #1d1d1d; color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+#orderFrame { position: fixed; top: 0; left: 286px; width: calc(100% - 286px); height: 100vh; border: 0; background: #f5f6fa; }
+body.order-module-open > .main-content { display: none; }
+.embedded-order body > aside { display: none; }
+.embedded-order .app-main { width: 100%; }
+
+@media (max-width: 760px) {
+    #orderFrame { left: 0; width: 100%; top: 66px; height: calc(100vh - 66px); }
+    body.order-module-open { background: #f5f6fa; }
+}
+
+@media print {
+    body.order-module-open > .sidebar,
+    body.order-module-open > .mobile-menu-btn,
+    body.order-module-open > .sidebar-overlay { display: none; }
+    body.order-module-open > #orderFrame { position: static; width: 100%; height: 100vh; }
+}
